@@ -1,1 +1,13 @@
+###PopLDdecay计算
+./PopLDdecay -InVCF thin-wheat-c.vcf.gz -SubPop landrace.txt -OutStat thin-wheat-lan.stat
+./PopLDdecay -InVCF thin-wheat-c.vcf.gz -SubPop cultivar.txt -OutStat thin-wheat-cul.stat
+./PopLDdecay -InVCF thin-wheat-c.vcf.gz -SubPop other.txt -OutStat thin-wheat-other.stat
 
+###合并群体list
+vim multi.list
+./thin-wheat-lan.stat.gz	Landrace
+./thin-wheat-cul.stat.gz	Cultivar
+./thin-wheat-other.stat.gz	Other
+
+###绘制LDdecay图
+perl Plot_MultiPop.pl -inList multi.list -output draw.graph
