@@ -1,7 +1,6 @@
-#表型计算blue值
+###Calculate BLUE for phenotypes
 library(lme4)
 library(lsmeans)
-###表型处理，BLUE值鉴定，当表型值缺失时，使用NA
 dat <- read.table("F:/wheat/phenotype/phe.txt",header = T)
 #View(dat)
 str(dat)
