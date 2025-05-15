@@ -1,0 +1,19 @@
+###计算遗传力h2
+library(lme4)
+dat <- read.table("F:/wheat/phenotype/phe.txt",header = T)
+trait <- phe$Phe
+year <- phe$Year
+line <- phe$Line
+loc <- phe$Loc
+rep <- phe$Rep
+TRAIT <- as.numeric(trait)
+LINE <- as.factor(line)
+LOC <- as.factor(loc)
+YEAR <- as.factor(year)
+REP <- as.factor(rep)
+## 建模
+blup <-lmer(TRAIT~(1|LINE)+(1|LOC)+(1|YEAR)+(1|REP%in%LOC:YEAR)+(1|LINE:LOC)+(1|LINE:YEAR))
+summary(blup)
+###计算h2
+h2 = (σG2) / (σG2 + (σGL2 ) / L + (σGY 2 ) / Y +(σE 2) / YRL)
+h2
