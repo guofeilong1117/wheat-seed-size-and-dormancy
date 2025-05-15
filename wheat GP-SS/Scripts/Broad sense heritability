@@ -1,10 +1,11 @@
 ###计算遗传力h2
 library(lme4)
+library(lsmeans)
 dat <- read.table("F:/wheat/phenotype/phe.txt",header = T)
 trait <- phe$Phe
 year <- phe$Year
 line <- phe$Line
-loc <- phe$Loc
+loc <- phe$Location
 rep <- phe$Rep
 TRAIT <- as.numeric(trait)
 LINE <- as.factor(line)
