@@ -1,4 +1,4 @@
-###提取气候变量
+###Extracting climate variables
 library(raster)
 setwd("F:/wheat/climate/wc2.1_2.5m_bio")
 temp1 <- raster("wc2.1_2.5m_bio_1.tif")
@@ -14,7 +14,7 @@ temp.data$BIO12 <- extract(temp12, samples)
 head(temp.dat
 write.table(temp.data, "F:/wheat/climate/bioclim.txt", sep="\t", row.names = F,quote=F)
 
-#####依据环境变量聚类
+##### Cluster according to environmental variables
 library(factoextra)
 library(dplyr)
 library(pacman)
@@ -23,9 +23,9 @@ bc<-read.csv("F:/wheat/climate/wheat.csv",sep=',',header=TRUE)
 names(bc)
 bc.scaled<-scale(bc[2:3])
 d<-dist(bc.scaled)
-km <- eclust(bc[2:3], "kmeans", nstart = 25)#聚类的散点图
+km <- eclust(bc[2:3], "kmeans", nstart = 25)
 fviz_gap_stat(km$gap_stat) 
-fviz_silhouette(km) # 轮廓图，每种聚类下面的分布情况
+fviz_silhouette(km) 
 set.seed(666)
 kmeans1<-kmeans(bc.scaled,centers=3,nstart = 25)
 fviz_cluster(object=kmeans1,data=bc[2:3],
