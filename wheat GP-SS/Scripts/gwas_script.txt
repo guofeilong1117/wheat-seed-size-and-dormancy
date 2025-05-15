@@ -28,5 +28,6 @@ Purcell S, Neale B, Todd-Brown K, Thomas L, Ferreira MA, Bender D, Maller J, Skl
 emmax：
 Kang HM, Sul JH, Service SK, Zaitlen NA, Kong SY, Freimer NB, Sabatti C, Eskin E. Variance component model to account for sample structure in genome-wide association studies. Nat Genet. 2010, 42(4):348-54.
 
+
 CMplot：
 Yin L, Zhang H, Tang Z, Xu J, Yin D, Zhang Z, Yuan,X, Zhu M, Zhao S, Li X, Liu X. rMVP: A Memory-efficient, Visualization-enhanced, and Parallel-accelerated Tool for Genome-wide Association Study. Genomics, proteomics & bioinformatics, 2021, 19(4), 619–628.
