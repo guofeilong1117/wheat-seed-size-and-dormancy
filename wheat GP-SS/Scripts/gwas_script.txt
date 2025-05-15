@@ -1,1 +1,29 @@
+###GWAS Script
+plink --noweb --vcf test.vcf --keep keep_individual.txt --make-bed --maf 0.05 --geno 0.1 --out gwas_all_chr.filter
+plink --bfile gwas_all_chr.filter --recode12 --output-missing-genotype 0 --transpose --out new_all_chr.filter
+emmax-kin -v -h -s -d 10 new_all_chr.filter
+emmax -v -d 10  -t new_all_chr.filter -p pheno/pheno1.txt -k new_all_chr.filter.hIBS.kinf  -o result/pheno1.txt
+plink --noweb --vcf test.vcf --list-all --tag-r2 0.25 --tag-kb 1000 --show-tags result/SNP_LD/SNP_filter.txt --out result/SNP_LD/SNP_LD
+###manhatton plot
+temp<-list.files(pattern = "*.txt")
+for (i in 1:length(temp)) {
+library("qqman")
+mydata<-read.table(temp[i],header=TRUE,sep="\t")
+mydata$SNP<-as.character(mydata$SNP)
+mydata$CHR<-as.numeric(mydata$CHR)
+mydata1<-na.omit(mydata)
+outfile<-paste("MM/",temp[i],".tiff",sep = "")
+png(outfile,height = 532.61,width = 1004.85,pointsize = 12)
+manhattan(mydata1,main=sub(".out.txt","",temp[i]),cex=0.8,cex.axis=1,col=c("red","blue"),suggestiveline =F,
+genomewideline=F,chrlabs = c("1:12"))
+abline(h=-log10(1.0E-6), col="red",lty=2,lwd=2)
+dev.off()}
 
+plink：
+Purcell S, Neale B, Todd-Brown K, Thomas L, Ferreira MA, Bender D, Maller J, Sklar P, de Bakker PI, Daly MJ, Sham PC. PLINK: a tool set for whole-genome association and population-based linkage analyses. Am J Hum Genet. 2007 Sep;81(3):559-75. 
+
+emmax：
+Kang HM, Sul JH, Service SK, Zaitlen NA, Kong SY, Freimer NB, Sabatti C, Eskin E. Variance component model to account for sample structure in genome-wide association studies. Nat Genet. 2010 Apr;42(4):348-54.
+
+qqman：
+Turner, (2018). qqman: an R package for visualizing GWAS results using Q-Q and manhattan plots. Journal of Open Source Software, 3(25), 731
