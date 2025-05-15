@@ -1,29 +1,32 @@
 ###GWAS Script
-plink --noweb --vcf test.vcf --keep keep_individual.txt --make-bed --maf 0.05 --geno 0.1 --out gwas_all_chr.filter
-plink --bfile gwas_all_chr.filter --recode12 --output-missing-genotype 0 --transpose --out new_all_chr.filter
-emmax-kin -v -h -s -d 10 new_all_chr.filter
-emmax -v -d 10  -t new_all_chr.filter -p pheno/pheno1.txt -k new_all_chr.filter.hIBS.kinf  -o result/pheno1.txt
-plink --noweb --vcf test.vcf --list-all --tag-r2 0.25 --tag-kb 1000 --show-tags result/SNP_LD/SNP_filter.txt --out result/SNP_LD/SNP_LD
-###manhatton plot
-temp<-list.files(pattern = "*.txt")
-for (i in 1:length(temp)) {
-library("qqman")
-mydata<-read.table(temp[i],header=TRUE,sep="\t")
-mydata$SNP<-as.character(mydata$SNP)
-mydata$CHR<-as.numeric(mydata$CHR)
-mydata1<-na.omit(mydata)
-outfile<-paste("MM/",temp[i],".tiff",sep = "")
-png(outfile,height = 532.61,width = 1004.85,pointsize = 12)
-manhattan(mydata1,main=sub(".out.txt","",temp[i]),cex=0.8,cex.axis=1,col=c("red","blue"),suggestiveline =F,
-genomewideline=F,chrlabs = c("1:12"))
-abline(h=-log10(1.0E-6), col="red",lty=2,lwd=2)
-dev.off()}
+plink --vcf wheat.vcf --maf 0.05 --geno 0.1 --threads 8 --recode vcf-iid --out wheat-c --allow-extra-chr --double-id --autosome-num 42
+plink --vcf wheat-c.vcf --threads 8 --recode --out wheat-c
+plink --noweb --file wheat-c --make-bed --threads 8 --out wheat-c
+plink --file wheat-c --recode12 --threads 8 --output-missing-genotype 0 --transpose --out wheat-c
+emmax-kin -v -h -s -d 10 wheat-c
+emmax -v -d 10 -t wheat-c -p pheno/pheno1.txt -k wheat-c.hIBS.kinf -c wheat-c.eigenvec -o result/result1
 
+###manhatton plot
+awk -vOFS="\t" '{for(i=3;i<NF;i++)printf("%s",$i"\t");print $NF}' result1.ps > result1a.ps
+mv result1a.ps result1a.txt
+paste ID.txt chr.txt Pos.txt result1a.txt > result1a-1.txt
+cat head.txt result1a-1.txt > result1a-2.txt
+R CMD BATCH --args manhatton_plot.R
+
+#!/path/to/Rscript
+setwd(".../wheat-c");
+getwd();
+library("CMplot")
+pmap <- read.table("result1a-2.txt", header = T)
+head(pmap)
+CMplot(pmap,plot.type="m",LOG10=TRUE,col= c("#3E0A52", "#423D77","#3F678B","#468C8D","#5FB47F","#9FD55C","#F9E956"),chr.den.col=c("darkgreen","yellow","red"),threshold = c(10e-6),threshold.lty = 2,threshold.col = "red",threshold.lwd = 3,amplify = FALSE,file = "jpg",file.name="pheno1",dpi = 300,file.out=TRUE,verbose=TRUE,width = 14,height = 6)
+
+####Software
 plink：
-Purcell S, Neale B, Todd-Brown K, Thomas L, Ferreira MA, Bender D, Maller J, Sklar P, de Bakker PI, Daly MJ, Sham PC. PLINK: a tool set for whole-genome association and population-based linkage analyses. Am J Hum Genet. 2007 Sep;81(3):559-75. 
+Purcell S, Neale B, Todd-Brown K, Thomas L, Ferreira MA, Bender D, Maller J, Sklar P, de Bakker PI, Daly MJ, Sham PC. PLINK: a tool set for whole-genome association and population-based linkage analyses. Am J Hum Genet. 2007, 81(3):559-75. 
 
 emmax：
-Kang HM, Sul JH, Service SK, Zaitlen NA, Kong SY, Freimer NB, Sabatti C, Eskin E. Variance component model to account for sample structure in genome-wide association studies. Nat Genet. 2010 Apr;42(4):348-54.
+Kang HM, Sul JH, Service SK, Zaitlen NA, Kong SY, Freimer NB, Sabatti C, Eskin E. Variance component model to account for sample structure in genome-wide association studies. Nat Genet. 2010, 42(4):348-54.
 
-qqman：
-Turner, (2018). qqman: an R package for visualizing GWAS results using Q-Q and manhattan plots. Journal of Open Source Software, 3(25), 731
+CMplot：
+Yin L, Zhang H, Tang Z, Xu J, Yin D, Zhang Z, Yuan,X, Zhu M, Zhao S, Li X, Liu X. rMVP: A Memory-efficient, Visualization-enhanced, and Parallel-accelerated Tool for Genome-wide Association Study. Genomics, proteomics & bioinformatics, 2021, 19(4), 619–628.
