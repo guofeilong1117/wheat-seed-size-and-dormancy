@@ -3,11 +3,7 @@ setwd("F:/wheat/GWAS-小麦/Haplotype")
 library(geneHapR)
 genotype <- import_vcf("TaMFT-3A.recode.vcf")
 pheno <- read.csv("Phenotype.csv", row.names = 1)
-hapResult <- vcf2hap(genotype,
-                     hapPrefix = "H",
-                     pad = 3,
-                     hetero_remove =T,
-                     na_drop = T)
+hapResult <- vcf2hap(genotype, hapPrefix = "H", pad = 3, hetero_remove =T, na_drop = T)
 hapResult
 hapSummary <- hap_summary(hapResult)
 plotHapTable(hapSummary)
