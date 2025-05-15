@@ -1,4 +1,4 @@
-###计算遗传力h2
+###Calculating broad-sense heritability
 library(lme4)
 library(lsmeans)
 dat <- read.table("F:/wheat/phenotype/phe.txt",header = T)
@@ -12,9 +12,10 @@ LINE <- as.factor(line)
 LOC <- as.factor(loc)
 YEAR <- as.factor(year)
 REP <- as.factor(rep)
-## 建模
+## Modeling
 blup <-lmer(TRAIT~(1|LINE)+(1|LOC)+(1|YEAR)+(1|REP%in%LOC:YEAR)+(1|LINE:LOC)+(1|LINE:YEAR))
 summary(blup)
-###计算h2
+
+###Calculating h2
 h2 = (σG2) / (σG2 + (σGL2 ) / L + (σGY 2 ) / Y +(σE 2) / YRL)
 h2
