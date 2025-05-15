@@ -1,0 +1,12 @@
+###XP-CLR
+XPCLR -xpclr Landrace.geno Culivar.geno wheat.snp map -w1 0.01 1000 10000 1 -p1 0.95 #参数 -w1 0.01 1000 10000 -p1 0.95
+
+#提取5%top_gene
+for i in {1..21}
+do
+sed '1d' xpclr$i.txt | awk '{print "'$i'""\t"$0}'  
+done |sed '/NA/d' | sort -k5,5n -k1,1n -k2,2n | sed '1i Chr\tWindowStart\tWindowStop\tSNPcount\tMeanY\tWstat' > result.txt
+
+wc -l result.txt #假设有100000个
+tail -n 5000 result.txt | sort -k1,1n -k2,2n | awk '{print $1"\t"$2"\t"$3}' | awk '{if($2<0) print $1"\t0\t"$3; else print $0}' > XPCLR_top5%.txt
+bedtools intersect -a wheat.gff3 -b XPCLR_top5%.txt -wa | awk '{print $1"\t"$4"\t"$5"\t"$9}' | awk -F";" '{print $1}' | sort | uniq > XPCLR_top5%_gene.txt
