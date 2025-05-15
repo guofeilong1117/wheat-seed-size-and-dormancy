@@ -1,7 +1,7 @@
 ###XP-CLR
 XPCLR -xpclr Landrace.geno Culivar.geno wheat.snp map -w1 0.01 1000 10000 1 -p1 0.95 #参数 -w1 0.01 1000 10000 -p1 0.95
 
-#提取5%top_gene
+#5%top_gene
 for i in {1..21}
 do
 sed '1d' xpclr$i.txt | awk '{print "'$i'""\t"$0}'  
