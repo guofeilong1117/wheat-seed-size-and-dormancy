@@ -1,8 +1,8 @@
-###计算Fst
+###Fst
 vcftools --gzvcf wheat-c.vcf.gz --weir-fst-pop landrace.txt --weir-fst-pop cultivar.txt --out Lan_Cul --fst-window-size 200000 --fst-window-step 100000
 sed "1d" Lan_Cul.windowed.weir.fst|awk '{if($5<0)print $1"\t"$2"\t0";else print $1"\t"$2"\t"$5}' > Lan_Cul_fst.txt
 
-####Fst可视化
+####Fst visualization
 rm(list=ls())
 library(qqman)
 library(Cairo)
@@ -19,7 +19,6 @@ dev.off()
 
 ####Fst_top5%_gene
 sort -k 5 -g Lan_Cul.windowed.weir.fst > Lan_Cul.sorted.fst
-#窗口计数
 wc -l Lan_Cul.sorted.fst #假设为20000
 #取前5%
 tail -n 1000 Lan_Cul.sorted.fst >Lan_Cul.sorted.5%.fst
@@ -27,7 +26,7 @@ cut -f 1-3 Lan_Cul.sorted.5%.fst | sort -k1,1n -k2,2n > Fst-5%-1.pos
 bedtools intersect -a Fst-5%-1.pos -b wheat.gff3 -wb > Fst-5%-gene.txt
 
 
-###计算Pi
+###Pi
 vcftools --gzvcf wheat-c.vcf.gz --keep landrace.txt --window-pi 200000 --window-pi-step 100000 --out landrace_Pi
 vcftools --gzvcf wheat-c.vcf.gz --keep cultivar.txt --window-pi 200000 --window-pi-step 100000 --out cultivar_Pi
 ###计算Pi_radio
@@ -37,7 +36,7 @@ awk 'FNR==NR {a=$1; next} {print $1/a}' Cul_Pi.txt Lan_Pi.txt > Lan_Cul_Pi.txt
 awk 'BEGIN{OFS="\t"} {print $1, $2}' landrace_pi.windowed.pi > pos_Pi.txt
 paste pos_Pi.txt Lan_Cul_Pi.txt > Pi_radio.txt
 
-####pi可视化
+####Pi visualization
 rm(list=ls())
 library(qqman)
 library(Cairo)
@@ -54,7 +53,6 @@ dev.off()
 
 ####Pi_top5%_gene
 sort -k 5 -g Pi_radio.txt > Lan_Cul.sorted.pi
-#窗口计数
 wc -l Lan_Cul.sorted.Pi #假设为20000
 #取前5%
 tail -n 1000 Lan_Cul.sorted.Pi >Lan_Cul.sorted.5%.pi
