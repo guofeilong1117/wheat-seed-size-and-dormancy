@@ -1,4 +1,4 @@
-###以TaMFT-3A的Haopotype分析
+### Haplotype analysis of TaMFT-3A
 setwd("F:/wheat/GWAS-小麦/Haplotype")
 library(geneHapR)
 genotype <- import_vcf("TaMFT-3A.recode.vcf")
