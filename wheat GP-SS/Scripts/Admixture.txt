@@ -1,0 +1,7 @@
+###vcf的LD过滤
+plink --bfile wheat-c --indep-pairwise 1000 10 0.4 --threads 8 --out wheat-c --allow-extra-chr --double-id --autosome-num 21
+plink --vcf wheat-c.vcf.gz --extract wheat-c.prune.in --threads 16 --make-bed --out final-wheat-c
+plink --allow-extra-chr --threads 20 -bfile final-wheat-c --pca 20 --out final-wheat-c
+###Admixture分析
+for K in i 2 3 4 5 6 7 8 9 10 11 12 13; do admixture --cv final-wheat-c.bed $K -j4 | tee log${K}.out; done
+grep -h CV log*.out |sort -nk4  -t ' ' > cross-validation_error.txt
