@@ -1,0 +1,35 @@
+###Calculating the genetic correlation between seed size and seed dormancy.
+./gcta64 --bfile wheat-c --thread-num 8 --make-grm --autosome --out wheat-c
+vim pheno.txt
+###
+FID	IID	GP3D	GP7D	TKW	KL	KW
+ABD	0051	0.27 	0.61 	38.79 	6.69 	3.04 
+ABD	0053	0.71 	0.83 	41.70 	6.75 	3.12 
+ABD	0055	0.72 	0.83 	40.08 	6.81 	3.06 
+...........
+###
+for i in $(seq 1 5); do
+echo $i
+./gcta64 --reml-bivar 1 $i --reml-bivar-nocove --grm wheat-c --pheno pheno.txt --reml-bivar-lrt-rg 0 --out GP3D_${i%}
+done
+
+for i in $(seq 1 5); do
+echo $i
+./gcta64 --reml-bivar 2 $i --reml-bivar-nocove --grm wheat-c --pheno pheno.txt --reml-bivar-lrt-rg 0 --out GP7D_${i%}
+done
+
+for i in $(seq 1 5); do
+echo $i
+./gcta64 --reml-bivar 3 $i --reml-bivar-nocove --grm wheat-c --pheno pheno.txt --reml-bivar-lrt-rg 0 --out TKW_${i%}
+done
+
+for i in $(seq 1 5); do
+echo $i
+./gcta64 --reml-bivar 4 $i --reml-bivar-nocove --grm wheat-c --pheno pheno.txt --reml-bivar-lrt-rg 0 --out KL_${i%}
+done
+
+for i in $(seq 1 5); do
+echo $i
+./gcta64 --reml-bivar 5 $i --reml-bivar-nocove --grm wheat-c --pheno pheno.txt --reml-bivar-lrt-rg 0 --out KW_${i%}
+done
+
