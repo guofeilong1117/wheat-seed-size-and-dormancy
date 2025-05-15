@@ -10,40 +10,16 @@ hapResult <- vcf2hap(genotype,
                      na_drop = T)
 hapResult
 hapSummary <- hap_summary(hapResult)
-plotHapTable(hapSummary)#绘制单倍型表格图
+plotHapTable(hapSummary)
 write.csv(hapResult, "TaMFT-3A.csv")
-results <-hapVsPheno(hapResult,
-                     hapPrefix = "H",
-                     mergeFigs = TRUE,
-                     pheno = pheno,
-                     phenoName = "GP3D",
-                     minAcc = 3)
-plot(results$figs)#绘制SNP与表型关联图
-results <-hapVsPheno(hapResult,
-                     hapPrefix = "H",
-                     mergeFigs = TRUE,
-                     pheno = pheno,
-                     phenoName = "GP7D",
-                     minAcc = 3)
-plot(results$figs)#绘制SNP与表型关联图
-results <-hapVsPheno(hapResult,
-                     hapPrefix = "H",
-                     mergeFigs = TRUE,
-                     pheno = pheno,
-                     phenoName = "TKW",
-                     minAcc = 3)
-plot(results$figs)#绘制SNP与表型关联图
-results <-hapVsPheno(hapResult,
-                     hapPrefix = "H",
-                     mergeFigs = TRUE,
-                     pheno = pheno,
-                     phenoName = "KL",
-                     minAcc = 3)
-plot(results$figs)#绘制SNP与表型关联图
-results <-hapVsPheno(hapResult,
-                     hapPrefix = "H",
-                     mergeFigs = TRUE,
-                     pheno = pheno,
-                     phenoName = "KW",
-                     minAcc = 3)
-plot(results$figs)#绘制SNP与表型关联图
+results <-hapVsPheno(hapResult, hapPrefix = "H", mergeFigs = TRUE, pheno = pheno, phenoName = "GP3D", minAcc = 3)
+plot(results$figs)
+results <-hapVsPheno(hapResult, hapPrefix = "H", mergeFigs = TRUE, pheno = pheno, phenoName = "GP7D", minAcc = 3)
+plot(results$figs)
+results <-hapVsPheno(hapResult, hapPrefix = "H", mergeFigs = TRUE, pheno = pheno, phenoName = "TKW", minAcc = 3)
+plot(results$figs)
+results <-hapVsPheno(hapResult, hapPrefix = "H", mergeFigs = TRUE, pheno = pheno, phenoName = "KL", minAcc = 3)
+plot(results$figs)
+results <-hapVsPheno(hapResult, hapPrefix = "H", mergeFigs = TRUE, pheno = pheno, phenoName = "KW", minAcc = 3)
+plot(results$figs)
+q()
