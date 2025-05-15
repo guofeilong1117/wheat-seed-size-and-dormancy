@@ -1,6 +1,6 @@
 #表型计算blue值
-#install.packages("lme4")
 library(lme4)
+library(lsmeans)
 ###表型处理，BLUE值鉴定，当表型值缺失时，使用NA
 dat <- read.table("F:/wheat/phenotype/phe.txt",header = T)
 #View(dat)
@@ -11,8 +11,7 @@ str(dat)
 library(lme4)
 m1=lmer(phe~Line +(1|Location)+(1+Year)+(1|Location:Rep), data=dat)
 as.data.frame(fixef(m1))
-library(lsmeans)
-re = lsmeans(m1,"Line") 。
+re = lsmeans(m1,"Line") 
 head(re)
 write.table(re, "phe_BLUE.txt", sep=" ")
 q()
