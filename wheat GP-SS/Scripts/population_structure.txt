@@ -1,6 +1,8 @@
 ###vcf的LD过滤
 plink --bfile wheat-c --indep-pairwise 1000 10 0.4 --threads 8 --out wheat-c --allow-extra-chr --double-id --autosome-num 21
 plink --vcf wheat-c.vcf.gz --extract wheat-c.prune.in --threads 16 --make-bed --out final-wheat-c
+
+###PCA分析
 plink --allow-extra-chr --threads 20 -bfile final-wheat-c --pca 20 --out final-wheat-c
 
 ###admixture分析
@@ -11,4 +13,3 @@ grep -h CV log*.out |sort -nk4  -t ' ' > cross-validation_error.txt
 ../tassel-5-standalone/run_pipeline.pl -Xmx30G -SortGenotypeFilePlugin -inputFile  thin-wheat-c.vcf.gz -outputFile  thin-wheat-c.sorted.vcf.gz -fileType VCF
 ../tassel-5-standalone/run_pipeline.pl -Xmx5G -importGuess  thin-wheat-c.sorted.vcf.gz -ExportPlugin -saveAs  thin-wheat-c.sorted.phy -format Phylip_Inter
 fasttree -nt -gtr thin-wheat-c.sorted.phy > fasttree.nwk
-
