@@ -1,0 +1,14 @@
+###Phenotypic Variance Explained
+
+#Generate a phe.assoc.txt 
+gemma-0.98.5-linux-static-AMD64 -bfile wheat-c -gk 2 -o fkin
+gemma-0.98.5-linux-static-AMD64 -bfile wheat-c -k ./output/fkin.sXX.txt -c cov.txt -lmm 1 -n 2 -o phe
+
+####R_script
+#!/path/to/Rscript
+setwd("./wheat-c/output");
+a<-read.table("phe.assoc.txt",header = T, sep = '\t')  
+a$pve = (2*(a$beta^2*a$af*(1-a$af)))/(2*a$beta*a$af*(1-a$af) + a$se^2*2*(545-a$n_miss)*a$af*(1-a$af))
+head (a)
+b<-a[c('chr','rs','ps','pve')] 
+write.table(b, "phe-PVE.txt", sep = '\t', row.names = F, quote=F)
